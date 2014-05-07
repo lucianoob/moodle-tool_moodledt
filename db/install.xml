@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<XMLDB PATH="tool/moodledt/db" VERSION="20101022" COMMENT="XMLDB file for Moodle plugin tool/moodledt/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceScheiaLocation="../../../lib/xmldb/xmldb.xsd">
+<TABLES>
+  <TABLE NAME="moodledt_bookmark" COMMENT="Bookmarks of plugins">
+      <FIELDS>
+        <FIELD NAME="id"          	TYPE="int"  LENGTH="10"     NOTNULL="true" UNSIGNED="true" SEQUENCE="true"		ENUM="false" COMMENT="Primary key of table"							NEXT="plugin_type"/>
+        <FIELD NAME="plugin_type"	TYPE="char" LENGTH="30"     NOTNULL="true"                 SEQUENCE="false"		ENUM="false" COMMENT="Type of plugin"         PREVIOUS="id"   		NEXT="plugin_name"/>
+        <FIELD NAME="plugin_name"   TYPE="char" LENGTH="100"     NOTNULL="true"                 SEQUENCE="false"		ENUM="false" COMMENT="Name of plugin"         PREVIOUS="plugin_type"					  />
+     </FIELDS>
+      <KEYS>
+        <KEY   NAME="primary"      TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="plugin_type_name"	UNIQUE="true" FIELDS="plugin_type,plugin_name"/>
+      </INDEXES>
+  </TABLE>
+</TABLES>
+</XMLDB>
