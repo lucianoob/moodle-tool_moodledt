@@ -22,10 +22,10 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2014050600;
+$plugin->version   = 2014050700;
 $plugin->requires  = 2012112900;
 $plugin->component = 'tool_moodledt';
-$plugin->release = '1.89 (Build: 2014050600)';
+$plugin->release = '1.91 (Build: 2014050700)';
 $plugin->maturity = MATURITY_BETA;
 
 ?>
