@@ -80,11 +80,27 @@ if(!empty($action)){
 			foreach ($lang_data['lines_language_files'] as $lang => $lines_language_file) {
 				echo $lang.': '. $lines_language_file.'<br>';
 			}
+			
+			echo $OUTPUT->heading(get_string('tags_duplicates', 'tool_moodledt'), 3, null);
+			if(!empty($lang_data['tags_duplicates'])) {
+				foreach ($lang_data['tags_duplicates'] as $lang => $tags) {
+					echo $lang.': <br> - ', implode('<br> - ', $tags).'<br>';
+				}
+			} else
+				echo get_string('tags_duplicates_empty', 'tool_moodledt');
 
 			echo $OUTPUT->heading(get_string('tags_header', 'tool_moodledt'), 3, null);
 			if(!empty($lang_data['tags_not_found'])) {
 				foreach ($lang_data['tags_not_found'] as $lang => $tags) {
-					echo $lang.': <br>', implode('<br>', $tags).'<br>';
+					echo $lang.': <br> - ', implode('<br> - ', $tags).'<br>';
+				}
+			} else
+				echo get_string('tags_empty', 'tool_moodledt');
+			
+			echo $OUTPUT->heading(get_string('tags_left', 'tool_moodledt'), 3, null);
+			if(!empty($lang_data['tags_left'])) {
+				foreach ($lang_data['tags_left'] as $lang => $tags) {
+					echo $lang.': <br> - ', implode('<br> - ', $tags).'<br>';
 				}
 			} else
 				echo get_string('tags_empty', 'tool_moodledt');
@@ -93,7 +109,7 @@ if(!empty($action)){
 			if(!empty($lang_data['tag_in_files'])) {
 				echo get_string('in_file_text', 'tool_moodledt', count($lang_data['tag_in_files'])).'<br>';
 				foreach ($lang_data['tag_in_files'] as $i => $tags) {
-					echo $tags.'<br>';
+					echo " - ".$tags.'<br>';
 				}
 			} else
 				echo get_string('in_file_empty', 'tool_moodledt');
@@ -114,8 +130,6 @@ if(!empty($action)){
 }
 
 echo $OUTPUT->footer();
-
-
 
 die;
 

@@ -232,51 +232,71 @@ function language_analize($plugintype, $pluginname, $rootdir, $lang_default){
 	$tmp = file($file_default);
 	$lines_default = array();
 	for ($i = 0; $i < count($tmp); $i++){
+		$tmp[$i] = str_replace(" ", "", $tmp[$i]);
 		if(strpos($tmp[$i], 'string[') !== false)
-			$lines_default[] = explode("']" , $tmp[$i])[0];
+			$lines_default[] = str_replace("\$string['", "", explode("']" , $tmp[$i])[0]);
 	}
 	
 	$langs_plugin = list_files_plugin("$rootdir/lang");
 	
 	$return = array();
 	
+	foreach (array_count_values($lines_default) as $tag => $value){
+		if($value > 1)
+			$return['tags_duplicates'][$lang_default][] = $tag;
+	}
+	
 	$return['lines_language_files'][$lang_default] = "<b>".count($lines_default).get_string('lines_text', 'tool_moodledt')."</b>";
 	
 	foreach ($langs_plugin as $lang_plugin) {
 		if(strpos($lang_plugin, '.php') !== false && strpos($lang_plugin, "/$lang_default/") === false && strpos($lang_plugin, 'index.php') === false){
-			$lang= explode('/', $lang_plugin)[count(explode('/', $lang_plugin))-2];
+			$lang = explode('/', $lang_plugin)[count(explode('/', $lang_plugin))-2];
 			$tmp = file($lang_plugin);
 			$lines[$lang] = array();
 			for ($i = 0; $i < count($tmp); $i++){
+				$tmp[$i] = str_replace(" ", "", $tmp[$i]);
 				if(strpos($tmp[$i], 'string[') !== false)
-					$lines[$lang][] = explode("']" , $tmp[$i])[0];
+					$lines[$lang][] = str_replace("\$string['", "", explode("']" , $tmp[$i])[0]);
 			}
-			if(count($lines_default) == count($lines[$lang]))
-				$return['lines_language_files'][$lang] = count($lines[$lang]).get_string('lines_text', 'tool_moodledt');
+			if(count($lines_default) < count($lines[$lang]))
+				$return['lines_language_files'][$lang] = "<font color='orange'><b>".count($lines[$lang]).get_string('lines_text', 'tool_moodledt')."</b></font>";
+			else if(count($lines_default) > count($lines[$lang]))
+				$return['lines_language_files'][$lang] = "<font color='red'><b>".count($lines[$lang]).get_string('lines_text', 'tool_moodledt')."</b></font>";
 			else 
-				$return['lines_language_files'][$lang] = "<font color='red'>".count($lines[$lang]).get_string('lines_text', 'tool_moodledt')."</font>";
+				$return['lines_language_files'][$lang] = count($lines[$lang]).get_string('lines_text', 'tool_moodledt');
 		}
 	}
 	if(!empty($lines)) {
 		foreach ($lines as $key => $line) {
+			foreach (array_count_values($line) as $tag => $value){
+				if($value > 1)
+					$return['tags_duplicates'][$key][] = $tag;
+			}
+			
 			$diff = array_diff($lines_default, $line);
 			if(!empty($diff)) {
 				foreach ($diff as $value)
-					$return['tags_not_found'][$key][] = "$value']";
+					$return['tags_not_found'][$key][] = $value;
 			} else 
 				$return['tags_not_found'][$key][] = get_string('ok_text', 'tool_moodledt');
+			
+			$left = array_diff($line, $lines_default);
+			if(!empty($left)) {
+				foreach ($left as $value)
+					$return['tags_left'][$key][] = $value;
+			} else
+				$return['tags_left'][$key][] = get_string('ok_text', 'tool_moodledt');
 		}
 	}
 	
 	$return['tag_in_files'] = array();
 	$files_plugin = list_files_plugin($rootdir);
-	foreach($lines_default as $line_default) {
-		$tag = str_replace("\$string['", "", $line_default);
+	foreach($lines_default as $tag) {
 		$in_file = false;
 		//echo "<br>".$tag.": ";
 		if($tag != ($plugintype.'_'.$pluginname) && strpos($tag, ":") === false && strpos($tag, "_help") !== strlen($tag)-5) {
 			foreach($files_plugin as $file_plugin) {
-				$file = preg_replace('/\s+/', '', file_get_contents($file_plugin));
+				$file = str_replace(' ', '', file_get_contents($file_plugin));
 				$in_file |= (strpos($file, "get_string('$tag'") !== false || strpos($file, 'get_string("'.$tag.'"') !== false || strpos($file, "simple_button_link('".$tag."'") !== false) ? true : false;
 				//if($in_file)
 					//echo "<br>----> $file_plugin";
