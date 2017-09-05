@@ -16,7 +16,7 @@ admin_externalpage_setup('toolmoodledt');
 
 $PAGE->set_docs_path("http://docs.moodle.org/en/MoodleDT_-_Development_Tools_Plugins_for_Moodle");
 
-$pluginman = plugin_manager::instance();
+$pluginman = core_plugin_manager::instance();
 $plugins = $pluginman->get_plugins();
 $plugin_url = '/admin/tool/moodledt/index.php';
 

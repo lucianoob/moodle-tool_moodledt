@@ -12,7 +12,6 @@
 require_once('../../../config.php');
 require_once($CFG->libdir.'/formslib.php');
 require_once($CFG->libdir.'/adminlib.php');
-require_once($CFG->libdir . '/pluginlib.php');
 require_once('locallib.php');
 
 /**
@@ -27,7 +26,7 @@ class action_form extends moodleform {
 		$plugin_url = '/admin/tool/moodledt/index.php';
 
 		$mform = $this->_form;
-		$pluginman = plugin_manager::instance();
+		$pluginman = core_plugin_manager::instance();
 		$plugins = $pluginman->get_plugins();
 		
 		$plugin_type = optional_param ( 'plugintype', '', PARAM_TEXT );
