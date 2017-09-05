@@ -12,7 +12,6 @@
 require_once('../../../config.php');
 require_once($CFG->libdir.'/formslib.php');
 require_once($CFG->libdir.'/adminlib.php');
-require_once($CFG->libdir . '/pluginlib.php');
 require_once('locallib.php');
 
 /**

@@ -11,7 +11,6 @@
 
 require_once('../../../config.php');
 require_once($CFG->libdir.'/adminlib.php');
-require_once($CFG->libdir . '/pluginlib.php');
 
 $file = htmlentities(optional_param ( 'file', '', PARAM_TEXT ));
 
